@@ -7,6 +7,8 @@ from ..dependencies.database import Base
 class Order(Base):
     __tablename__ = "orders"
 
+
+    #Docs
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     status = Column(String(100), nullable=False)
     total_price = Column(Integer, nullable=False)
