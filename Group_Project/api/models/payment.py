@@ -9,4 +9,4 @@ class Payment(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     payment_type = Column(String(100), nullable=False)
     transaction_status = Column(String(100), nullable=False)
-    payment_information = Column(Text, nullable=True)
+    payment_information = Column(String(100), nullable=True)
