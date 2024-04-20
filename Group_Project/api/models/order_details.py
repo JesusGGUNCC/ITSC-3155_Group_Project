@@ -14,6 +14,7 @@ class OrderDetail(Base):
     cust_address = Column(String(100), ForeignKey("customers.address"))
 
     dish_id = Column(Integer, ForeignKey("dishes.id"))
+    total = Column(Integer, ForeignKey("dishes.total_price"))
 
 
     name = relationship("Customer", back_populates="order_details")
