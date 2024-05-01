@@ -3,6 +3,6 @@ class conf:
     db_name = "resturaunt_api"
     db_port = 3306
     db_user = "root"
-    db_password = "AlanWake2fortheps2"
+    db_password = "Password123!"
     app_host = "localhost"
     app_port = 8000
