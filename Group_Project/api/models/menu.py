@@ -12,5 +12,5 @@ class Menu(Base):
    category = Column(String(100), unique=True, nullable=True)
 
 
-   dishes = relationship("dishes", back_populates="menu")
+   dishes = relationship("Dish", back_populates="menu")
 

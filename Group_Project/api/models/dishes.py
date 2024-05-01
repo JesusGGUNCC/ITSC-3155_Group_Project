@@ -17,4 +17,4 @@ class Dish(Base):
 
 
 
-   menu = relationship("menu", back_populates="dishes")
+   menu = relationship("Menu", back_populates="dishes")
