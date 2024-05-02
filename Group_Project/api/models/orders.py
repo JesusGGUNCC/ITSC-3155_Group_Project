@@ -8,8 +8,8 @@ class Order(Base):
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     status = Column(String(100), index=True, nullable=False)
-    desciprtion = Column(String(100), index=True, nullable=False)
+    description = Column(String(100), index=True, nullable=False)
     total_price = Column(Float, index=True, nullable=False)
-    date = Column(DATETIME, index=True, nullable=False)
+    date = Column(DATETIME, index=True, nullable=True)
 
     order_details = relationship("Order_Details", back_populates="order")
