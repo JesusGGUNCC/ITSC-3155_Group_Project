@@ -14,10 +14,10 @@ class CustomerCreate(CustomerBase):
 
 # Not optional because these things cannont be null
 class CustomerUpdate(BaseModel):
-    name: str
-    email: str
-    phone: str
-    address: str
+    name: Optional[str] = None
+    email: Optional[str] = None
+    phone: Optional[str] = None
+    address: Optional[str] = None
 
 class Customer(CustomerBase):
     id: int
