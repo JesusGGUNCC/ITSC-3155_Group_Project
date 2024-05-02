@@ -8,22 +8,22 @@ class DishBase(BaseModel):
     dish_name: str
     price: float
     calories: int
-    menu_category_id: int
+
 
 class DishCreate(DishBase):
-    pass
+    menu_category_id: int
 
 # Not optional because these things cannont be null
 class DishUpdate(BaseModel):
-    dish_name: str
-    price: float
-    calories: int
-    menu_category_id: int
+    dish_name: Optional[str] = None
+    price: Optional[float] = None
+    calories: Optional[int] = None
+    menu_category_id: Optional[int] = None
 
 
 class Dish(DishBase):
     id: int
-    Menu: Menu = None
+    menu: Menu = None
 
     class ConfigDict:
         from_attribute = True
