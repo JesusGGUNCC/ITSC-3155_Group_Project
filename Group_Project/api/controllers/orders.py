@@ -8,7 +8,6 @@ def create(db: Session, request):
         status=request.status,
         description=request.description,
         total_price=request.total_price,
-        date=request.date
     )
 
     try:

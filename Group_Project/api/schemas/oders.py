@@ -15,7 +15,7 @@ class OrderCreate(OrderBase):
 class OrderUpdate(BaseModel):
     status: Optional[str] = None
     description: Optional[str] = None
-    total_price: Optional[str] = None
+    total_price: Optional[int] = None
 
 class Order(OrderBase):
     id: int
