@@ -16,6 +16,7 @@ class Customer(Base):
 
 
     account = relationship("Account", back_populates="customer")
+    order_details = relationship("Order_Details", back_populates="order_cust")
 
 
 

@@ -20,3 +20,4 @@ class Dish(Base):
 
    menu = relationship("Menu", back_populates="dishes")
    ratings = relationship("Rating", back_populates="dish")
+   order_details = relationship("Order_Details", "order_dish")
