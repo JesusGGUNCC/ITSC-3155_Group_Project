@@ -1,37 +1,65 @@
 from sqlalchemy.orm import Session
-from datetime import datetime
-from typing import List
-from ..schemas import PromotionCreate, PromotionUpdate
-from ..models import Promotion
+from fastapi import HTTPException, status, Response, Depends
+from ..models import promotions as model
+from sqlalchemy.exc import SQLAlchemyError
 
-def create_promotion(db: Session, promotion: PromotionCreate):
-    db_promotion = Promotion(**promotion.dict())
-    db.add(db_promotion)
-    db.commit()
-    db.refresh(db_promotion)
-    return db_promotion
+def create(db: Session, request):
+    new_item = model.Promotions(
+        category = request.category
+    )
+    
+    try:
+        db.add(new_item)
+        db.commit()
+        db.refresh(new_item)
+    except SQLAlchemyError as e:
+        error = str(e.__dict__['orig'])
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error)
+    return new_item
 
-def get_promotions(db: Session, skip: int = 0, limit: int = 10):
-    return db.query(Promotion).offset(skip).limit(limit).all()
+def read_all(db: Session):
+    try:
+        result = db.query(model.Promotions).all()
+    except SQLAlchemyError as e:
+        error = str(e.__dict__['orig'])
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error)
+    return result
 
-def get_promotion(db: Session, promotion_id: int):
-    return db.query(Promotion).filter(Promotion.id == promotion_id).first()
 
-def update_promotion(db: Session, promotion_id: int, promotion: PromotionUpdate):
-    db_promotion = db.query(Promotion).filter(Promotion.id == promotion_id).first()
-    if db_promotion is None:
-        return None
-    for var, value in vars(promotion).items():
-        if value is not None:
-            setattr(db_promotion, var, value)
-    db.commit()
-    db.refresh(db_promotion)
-    return db_promotion
+def read_one(db: Session, item_id):
+    try:
+        item = db.query(model.Promotions).filter(model.Promotions.id == item_id).first()
+        if not item:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Id not found!")
+    except SQLAlchemyError as e:
+        error = str(e.__dict__['orig'])
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error)
+    return item
 
-def delete_promotion(db: Session, promotion_id: int):
-    db_promotion = db.query(Promotion).filter(Promotion.id == promotion_id).first()
-    if db_promotion is None:
-        return False
-    db.delete(db_promotion)
-    db.commit()
-    return True
+
+def update(db: Session, item_id, request):
+    try:
+        item = db.query(model.Promotions).filter(model.Promotions.id == item_id)
+        if not item.first():
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Id not found!")
+        update_data = request.dict(exclude_unset=True)
+        item.update(update_data, synchronize_session=False)
+        db.commit()
+    except SQLAlchemyError as e:
+        error = str(e.__dict__['orig'])
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error)
+    return item.first()
+
+
+def delete(db: Session, item_id):
+    try:
+        item = db.query(model.Promotions).filter(model.Promotions.id == item_id)
+        if not item.first():
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Id not found!")
+        item.delete(synchronize_session=False)
+        db.commit()
+    except SQLAlchemyError as e:
+        error = str(e.__dict__['orig'])
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
