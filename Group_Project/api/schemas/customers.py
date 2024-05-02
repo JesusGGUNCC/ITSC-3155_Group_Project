@@ -12,7 +12,6 @@ class CustomerBase(BaseModel):
 class CustomerCreate(CustomerBase):
     pass
 
-# Not optional because these things cannont be null
 class CustomerUpdate(BaseModel):
     name: Optional[str] = None
     email: Optional[str] = None

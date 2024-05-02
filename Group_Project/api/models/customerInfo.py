@@ -8,8 +8,8 @@ class Customer(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(100), index=True)
-    email = Column(String(100), index=True)
+    email = Column(String(100),primary_key=True, index=True)
     phone = Column(String(15), index=True)
     address = Column(String(100), index=True)
 
-    accounts = relationship("Account", back_populates="customers")
+    account = relationship("Account", back_populates="customer")
