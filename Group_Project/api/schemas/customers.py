@@ -21,6 +21,5 @@ class CustomerUpdate(BaseModel):
 
 class Customer(CustomerBase):
     id: int
-
     class ConfigDict:
         from_attribute = True

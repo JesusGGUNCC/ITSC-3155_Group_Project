@@ -14,7 +14,9 @@ class Dish(Base):
    calories = Column(Integer, index=True, nullable=False, server_default='0.0')
    menu_category_id = Column(Integer, ForeignKey("menu.id"))
 
+   dish_score = Column(DECIMAL(2,2), ForeignKey("rating.score"), index=True)
 
 
 
    menu = relationship("Menu", back_populates="dishes")
+   ratings = relationship("Rating", back_populates="dish")

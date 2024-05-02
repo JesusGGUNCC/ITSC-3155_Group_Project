@@ -8,9 +8,7 @@ class Rating(Base):
 
     id = Column(Integer, index=True, primary_key=True, autoincrement=True)
 
-    score = Column(DECIMAL(2,2))
+    score = Column(DECIMAL(2,2), index=True)
     review = Column(String(100))
 
-    dish_id = Column(Integer, ForeignKey("dishes.id"))
-
-    dID = relationship("Dish", back_populates="rating")
+    dish = relationship("Dish", back_populates="ratings")
