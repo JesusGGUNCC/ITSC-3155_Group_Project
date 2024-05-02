@@ -1,14 +1,16 @@
 from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel
-from .customers import Customer
 
 
 class AccountBase(BaseModel):
-    pass
+    username:str
+    name: str
+    phone: str
+    address: str
 
 class AccountCreate(AccountBase):
-    username:str
+    pass
     password: str
 
 
@@ -17,10 +19,9 @@ class AccountUpdate(BaseModel):
     password: Optional[str] = None
 
 class Account(AccountBase):
-    username: str
-    accountInfo: Customer = None
+    id: int
 
     class ConfigDict:
-        from_attributes = True
+        orm_mode = True
 
 

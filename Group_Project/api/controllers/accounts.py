@@ -7,7 +7,10 @@ from sqlalchemy.exc import SQLAlchemyError
 def create(db: Session, request):
     new_item = model.Account(
         username=request.username,
-        password=request.password
+        password=request.password,
+        name=request.name,
+        address=request.address,
+        phone=request.phone
     )
     try:
         db.add(new_item)

@@ -9,7 +9,8 @@ def create(db: Session, request):
         name=request.name,
         email=request.email,
         phone=request.phone,
-        address=request.address
+        address=request.address,
+        accountID=request.accountID
     )
 
     try:

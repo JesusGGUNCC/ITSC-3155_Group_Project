@@ -7,8 +7,12 @@ class Account(Base):
     __tablename__ = "accounts"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    username = Column(String(100), ForeignKey("customers.email"), index=True)
+    username = Column(String(100), index=True)
     password = Column(String(100), index=True)
+
+    name = Column(String(100), index=True)
+    address = Column(String(100), index=True)
+    phone = Column(String(100), index=True)
 
 
     customer = relationship("Customer", back_populates="account")
