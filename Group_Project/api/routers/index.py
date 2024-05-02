@@ -1,4 +1,4 @@
-from . import dishes, customers, accounts, menu, orders
+from . import dishes, customers, accounts, menu, orders, ratings
 
 
 
