@@ -4,59 +4,64 @@ from ..models import payment as model
 from sqlalchemy.exc import SQLAlchemyError
 
 
-def handle_sqlalchemy_error(e: SQLAlchemyError):
-    error = str(e)
-    raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error)
 
 
-def create_or_update(db: Session, item_id=None, request=None):
+def create(db: Session, request):
+    new_item = model.Payment(
+        payment_type=request.payment_type,
+        transaction_status=request.transaction_status,
+        payment_information=request.payment_information
+    )
+
     try:
-        if item_id is None:
-            new_item = model.Payment(
-                payment_type=request.payment_type,
-                payment_information=request.payment_information,
-                transaction_status=request.transaction_status
-            )
-            db.add(new_item)
-        else:
-            item = db.query(model.Payment).filter(model.Payment.id == item_id).first()
-            if not item:
-                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Payment ID not found!")
-            update_data = request.dict(exclude_unset=True)
-            for key, value in update_data.items():
-                setattr(item, key, value)
+        db.add(new_item)
         db.commit()
         db.refresh(new_item)
-        return new_item if item_id is None else item
     except SQLAlchemyError as e:
-        handle_sqlalchemy_error(e)
+        error = str(e.__dict__['orig'])
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error)
+    return new_item
 
 
 def read_all(db: Session):
     try:
         result = db.query(model.Payment).all()
-        return result
     except SQLAlchemyError as e:
-        handle_sqlalchemy_error(e)
-
+        error = str(e.__dict__['orig'])
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error)
+    return result
 
 def read_one(db: Session, item_id):
     try:
         item = db.query(model.Payment).filter(model.Payment.id == item_id).first()
         if not item:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Payment ID not found!")
-        return item
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Id not found!")
     except SQLAlchemyError as e:
-        handle_sqlalchemy_error(e)
+        error = str(e.__dict__['orig'])
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error)
+    return item
 
+def update(db: Session, item_id, request):
+    try:
+        item = db.query(model.Payment).filter(model.Payment.id == item_id)
+        if not item.first():
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Id not found!")
+        update_data = request.dict(exclude_unset=True)
+        item.update(update_data, synchronize_session=False)
+        db.commit()
+    except SQLAlchemyError as e:
+        error = str(e.__dict__['orig'])
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error)
+    return item.first()
 
 def delete(db: Session, item_id):
     try:
-        item = db.query(model.Payment).filter(model.Payment.id == item_id).first()
-        if not item:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Payment ID not found!")
-        db.delete(item)
+        item = db.query(model.Payment).filter(model.Payment.id == item_id)
+        if not item.first():
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Id not found!")
+        item.delete(synchronize_session=False)
         db.commit()
-        return Response(status_code=status.HTTP_204_NO_CONTENT)
     except SQLAlchemyError as e:
-        handle_sqlalchemy_error(e)
+        error = str(e.__dict__['orig'])
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)

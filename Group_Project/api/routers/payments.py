@@ -11,21 +11,21 @@ router = APIRouter(
 )
 
 @router.post("/", response_model=schema.Payment)
-def create_payment(payment_data: schema.PaymentCreate, db: Session = Depends(get_db)):
-    return controller.create_payment(db=db, payment_data=payment_data)
+def create(request: schema.PaymentCreate, db: Session = Depends(get_db)):
+    return controller.create(db=db, request=request)
 
 @router.get("/", response_model=List[schema.Payment])
-def get_all_payments(db: Session = Depends(get_db)):
-    return controller.get_all_payments(db=db)
+def read_all(db: Session = Depends(get_db)):
+    return controller.read_all(db=db)
 
 @router.get("/{payment_id}", response_model=schema.Payment)
-def get_payment(payment_id: int, db: Session = Depends(get_db)):
-    return controller.get_payment(db=db, payment_id=payment_id)
+def read_one(item_id: int, db: Session = Depends(get_db)):
+    return controller.read_one(db=db, item_id=item_id)
 
 @router.put("/{payment_id}", response_model=schema.Payment)
-def update_payment(payment_id: int, payment_data: schema.PaymentUpdate, db: Session = Depends(get_db)):
-    return controller.update_payment(db=db, payment_id=payment_id, payment_data=payment_data)
+def update(item_id: int, request: schema.PaymentUpdate, db: Session = Depends(get_db)):
+    return controller.update(db=db, request=request, item_id=item_id)
 
 @router.delete("/{payment_id}")
-def delete_payment(payment_id: int, db: Session = Depends(get_db)):
-    return controller.delete_payment(db=db, payment_id=payment_id)
+def delete(item_id: int, db: Session = Depends(get_db)):
+    return controller.delete(db=db, item_id=item_id)
