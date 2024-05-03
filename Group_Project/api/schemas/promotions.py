@@ -10,7 +10,8 @@ class PromotionBase(BaseModel):
 
 
 class PromotionCreate(PromotionBase):
-    pass
+    category: str
+    expiration_date: Optional[datetime] = None
 
 
 class PromotionUpdate(BaseModel):
@@ -20,7 +21,6 @@ class PromotionUpdate(BaseModel):
 
 class Promotion(PromotionBase):
     id: int
-    expriation_date: Optional[datetime] = None
 
     class ConfigDict:
         from_attributes = True

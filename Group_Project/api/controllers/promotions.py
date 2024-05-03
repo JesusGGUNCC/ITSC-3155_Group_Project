@@ -5,7 +5,10 @@ from sqlalchemy.exc import SQLAlchemyError
 
 def create(db: Session, request):
     new_item = model.Promotions(
-        category = request.category
+        category = request.category,
+        promo_code = request.promo_code,
+        description = request.description,
+        expiration_date = request.expiration_date
     )
     
     try:
