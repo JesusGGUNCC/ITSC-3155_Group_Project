@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, DECIMAL, DATETIME
+from sqlalchemy import Column, ForeignKey, Integer, String, DECIMAL, DATETIME, Float
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from ..dependencies.database import Base
@@ -14,10 +14,10 @@ class Dish(Base):
    calories = Column(Integer, index=True, nullable=False, server_default='0.0')
    menu_category_id = Column(Integer, ForeignKey("menu.id"))
 
-   dish_score = Column(DECIMAL(2,2), ForeignKey("rating.score"), index=True)
+   dish_score = Column(Float, ForeignKey("rating.score"), index=True)
 
 
 
-   menu = relationship("Menu", back_populates="dishes")
-   ratings = relationship("Rating", back_populates="dish")
-   order_details = relationship("Order_Details", back_populates="order_dish")
+   menu = relationship("Menu", foreign_keys=[menu_category_id])
+   ratings = relationship("Rating", foreign_keys=[dish_score])
+   order_details = relationship("Order", back_populates="dish")

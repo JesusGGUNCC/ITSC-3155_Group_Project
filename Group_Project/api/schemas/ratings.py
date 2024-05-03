@@ -8,7 +8,7 @@ class RatingBase(BaseModel):
     review: str
 
 class RatingCreate(RatingBase):
-    pass
+    dishID: Optional[int] = None
 
 class RatingUpdate(BaseModel):
     score: Optional[float] = None

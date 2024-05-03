@@ -15,8 +15,7 @@ class Customer(Base):
     accountID = Column(Integer, ForeignKey("accounts.id"), index=True, nullable=True)
 
 
-    account = relationship("Account", back_populates="customer")
-    order_details = relationship("Order_Details", back_populates="order_cust")
+    account = relationship("Account", foreign_keys=[accountID])
 
 
 

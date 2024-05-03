@@ -10,6 +10,12 @@ class Order(Base):
     status = Column(String(100), index=True, nullable=False)
     description = Column(String(100), index=True, nullable=False)
     total_price = Column(Float, index=True, nullable=False)
-    date = Column(DATETIME, index=True, nullable=True)
 
-    order_details = relationship("Order_Details", back_populates="order")
+
+    custID = Column(Integer, ForeignKey("customers.id"), index=True)
+    dishID = Column(Integer, ForeignKey("dishes.id"), index=True)
+
+    cust = relationship("Customer", foreign_keys=[custID])
+    dish = relationship("Dish", foreign_keys=[dishID])
+
+

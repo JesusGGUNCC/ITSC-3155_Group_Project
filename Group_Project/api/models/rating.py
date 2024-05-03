@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, DECIMAL, DATETIME
+from sqlalchemy import Column, ForeignKey, Integer, String, DECIMAL, DATETIME, Float
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from ..dependencies.database import Base
@@ -8,7 +8,8 @@ class Rating(Base):
 
     id = Column(Integer, index=True, primary_key=True, autoincrement=True)
 
-    score = Column(DECIMAL(2,2), index=True)
+    dishID = Column(Integer, ForeignKey("dishes.id"), index=True)
+    score = Column(Float, index=True)
     review = Column(String(100))
 
-    dish = relationship("Dish", back_populates="ratings")
+    dish = relationship("Dish", foreign_keys=[dishID])
